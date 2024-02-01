@@ -9,6 +9,6 @@ struct Process {
     char command[256];
 };
 
-void afficher_processus();
+void show_process();
 
 #endif
