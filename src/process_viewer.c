@@ -1,13 +1,7 @@
+#include "process_viewer.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <dirent.h>
 #include <string.h>
-#include <ncurses.h>
-
-struct Process {
-    char pid[16];
-    char command[256];
-};
 
 void afficher_processus() {
     DIR *dir;
@@ -15,11 +9,11 @@ void afficher_processus() {
 
     dir = opendir("/proc");
     if (dir == NULL) {
-        perror("Erreur lors de l'ouverture du répertoire /proc");
+        perror("Error while opening /proc");
         exit(EXIT_FAILURE);
     }
 
-    mvprintw(2, 0, "PID\tNom du Processus");
+    mvprintw(2, 0, "PID\tCOMMAND");
     mvprintw(3, 0, "---------------------");
 
     int ligne = 4;
@@ -44,33 +38,4 @@ void afficher_processus() {
     }
 
     closedir(dir);
-}
-
-int main() {
-    initscr();
-    raw();
-    keypad(stdscr, TRUE);
-    int ch;
-    while (1) {
-        clear();
-
-        mvprintw(0, 0, "Liste des processus :");
-        afficher_processus();
-
-        mvprintw(LINES - 2, 0, "Appuyez sur 'q' pour quitter. Appuyez sur 'r' pour rafraîchir.");
-
-        refresh();
-
-        ch = getch();
-
-        // Handle user input
-        if (ch == 'q' || ch == 'Q') {
-            break;
-        } else if (ch == 'r' || ch == 'R') {
-            afficher_processus();
-        }
-    }
-
-    endwin();
-    return 0;
 }
